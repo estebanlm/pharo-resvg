@@ -55,15 +55,15 @@ LibResvg class >> example [
 
 	"this example requires Alexandria loaded (to convert the image to a Form)"
 	^ self 
-		renderFormFromString: './perspective/working-on-new-icons/stop.svg' asFileReference contents
+		example: './perspective/working-on-new-icons/stop.svg'
 		scale: 16
 ]
 
 { #category : 'examples' }
-LibResvg class >> example: scale [
+LibResvg class >> example: fileName scale: scale [
 
 	^ self 
-		renderFormFromString: './perspective/working-on-new-icons/stop.svg' asFileReference contents
+		renderFormFromString: fileName asFileReference contents
 		scale: scale
 ]
 
@@ -77,24 +77,20 @@ LibResvg class >> renderFormFromString: aString [
 
 { #category : 'rendering' }
 LibResvg class >> renderFormFromString: source scale: scale [
-	| resvg options tree err size width height stride pixels transform convertedPixels |
+	| resvg options treeHolder tree err size width height stride pixels transform convertedPixels |
 
 	resvg := LibResvg uniqueInstance.
 
 	options := resvg options_create.
-	"esto deberia ser 
-	treeHolder :=  newValueHolder.
-	y despues hacer tree := treeHolder value.
-	"
-	tree := ResvgRenderTree basicNew setHandle: (ByteArray new: 8).
+	treeHolder := ResvgRenderTree newValueHolder.
 	err := resvg 
 		parse_tree_from_data: source 
 		len: source size
 		opt: options
-		tree: tree.
-	tree setHandle: (tree getHandle pointerAt: 1).
+		tree: treeHolder.
 	err = 0 ifFalse: [ 
 		self error: 'Can''t parse svg.' ].
+	tree := treeHolder value.
 
 	"render the image"
 	size := resvg get_image_size: tree.
