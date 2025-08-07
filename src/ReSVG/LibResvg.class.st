@@ -10,6 +10,7 @@ CigCLibraryGenerator new
 	import: '/usr/include/resvg.h';
 	cExcludePath: '/usr/include';
 	nameGenerator: (CigNameGenerator new withoutPrefixInFunctionName);
+	constantGenerator: (CigConstantGenerator new include: 'resvg.h');
 	generate.
 ```
 "
@@ -17,6 +18,7 @@ Class {
 	#name : 'LibResvg',
 	#superclass : 'FFILibrary',
 	#pools : [
+		'ResvgConstants',
 		'ResvgTypedef'
 	],
 	#category : 'ReSVG-Library',
@@ -138,7 +140,7 @@ LibResvg class >> toForm: convertedPixels width: width height: height [
 	^ surface asForm
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> get_image_bboxTree: tree bbox: bbox [
 	"/**
 	 * @brief Returns an image bounding box.
@@ -155,7 +157,7 @@ LibResvg >> get_image_bboxTree: tree bbox: bbox [
 	^ self ffiCall: #(int resvg_get_image_bbox(resvg_render_tree* tree, resvg_rect* bbox))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> get_image_size: tree [
 	"/**
 	 * @brief Returns an image size.
@@ -172,7 +174,7 @@ LibResvg >> get_image_size: tree [
 	^ self ffiCall: #(resvg_size resvg_get_image_size(resvg_render_tree* tree))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> get_node_bboxTree: tree id: id bbox: bbox [
 	"/**
 	 * @brief Returns node's bounding box in canvas coordinates by ID.
@@ -188,7 +190,7 @@ LibResvg >> get_node_bboxTree: tree id: id bbox: bbox [
 	^ self ffiCall: #(int resvg_get_node_bbox(resvg_render_tree* tree, const char* id, resvg_rect* bbox))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> get_node_stroke_bboxTree: tree id: id bbox: bbox [
 	"/**
 	 * @brief Returns node's bounding box, including stroke, in canvas coordinates by ID.
@@ -204,7 +206,7 @@ LibResvg >> get_node_stroke_bboxTree: tree id: id bbox: bbox [
 	^ self ffiCall: #(int resvg_get_node_stroke_bbox(resvg_render_tree* tree, const char* id, resvg_rect* bbox))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> get_node_transformTree: tree id: id transform: transform [
 	"/**
 	 * @brief Returns node's transform by ID.
@@ -220,7 +222,7 @@ LibResvg >> get_node_transformTree: tree id: id transform: transform [
 	^ self ffiCall: #(int resvg_get_node_transform(resvg_render_tree* tree, const char* id, resvg_transform* transform))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> get_object_bboxTree: tree bbox: bbox [
 	"/**
 	 * @brief Returns an object bounding box.
@@ -238,7 +240,7 @@ LibResvg >> get_object_bboxTree: tree bbox: bbox [
 	^ self ffiCall: #(int resvg_get_object_bbox(resvg_render_tree* tree, resvg_rect* bbox))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> init_log [
 	"/**
 	 * @brief Initializes the library log.
@@ -253,7 +255,7 @@ LibResvg >> init_log [
 	self ffiCall: #(void resvg_init_log())
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> is_image_empty: tree [
 	"/**
 	 * @brief Checks that tree has any nodes.
@@ -273,7 +275,7 @@ LibResvg >> macLibraryName [
 		findLibrary: 'libresvg.dylib'
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> node_existsTree: tree id: id [
 	"/**
 	 * @brief Returns `true` if a renderable node with such an ID exists.
@@ -288,7 +290,7 @@ LibResvg >> node_existsTree: tree id: id [
 	^ self ffiCall: #(int resvg_node_exists(resvg_render_tree* tree, const char* id))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_create [
 	"/**
 	 * @brief Creates a new #resvg_options object.
@@ -299,7 +301,7 @@ LibResvg >> options_create [
 	^ self ffiCall: #(resvg_options* resvg_options_create())
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_destroy: opt [
 	"/**
 	 * @brief Destroys the #resvg_options.
@@ -308,7 +310,7 @@ LibResvg >> options_destroy: opt [
 	self ffiCall: #(void resvg_options_destroy(resvg_options* opt))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_load_font_dataOpt: opt data: data len: len [
 	"/**
 	 * @brief Loads a font data into the internal fonts database.
@@ -321,7 +323,7 @@ LibResvg >> options_load_font_dataOpt: opt data: data len: len [
 	self ffiCall: #(void resvg_options_load_font_data(resvg_options* opt, const char* data, uintptr_t len))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_load_font_fileOpt: opt file_path: file_path [
 	"/**
 	 * @brief Loads a font file into the internal fonts database.
@@ -336,7 +338,7 @@ LibResvg >> options_load_font_fileOpt: opt file_path: file_path [
 	^ self ffiCall: #(int32_t resvg_options_load_font_file(resvg_options* opt, const char* file_path))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_load_system_fonts: opt [
 	"/**
 	 * @brief Loads system fonts into the internal fonts database.
@@ -356,7 +358,7 @@ LibResvg >> options_load_system_fonts: opt [
 	self ffiCall: #(void resvg_options_load_system_fonts(resvg_options* opt))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_cursive_familyOpt: opt family: family [
 	"/**
 	 * @brief Sets the `cursive` font family.
@@ -371,7 +373,7 @@ LibResvg >> options_set_cursive_familyOpt: opt family: family [
 	self ffiCall: #(void resvg_options_set_cursive_family(resvg_options* opt, const char* family))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_dpiOpt: opt dpi: dpi [
 	"/**
 	 * @brief Sets the target DPI.
@@ -384,7 +386,7 @@ LibResvg >> options_set_dpiOpt: opt dpi: dpi [
 	self ffiCall: #(void resvg_options_set_dpi(resvg_options* opt, float dpi))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_fantasy_familyOpt: opt family: family [
 	"/**
 	 * @brief Sets the `fantasy` font family.
@@ -399,7 +401,7 @@ LibResvg >> options_set_fantasy_familyOpt: opt family: family [
 	self ffiCall: #(void resvg_options_set_fantasy_family(resvg_options* opt, const char* family))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_font_familyOpt: opt family: family [
 	"/**
 	 * @brief Sets the default font family.
@@ -414,7 +416,7 @@ LibResvg >> options_set_font_familyOpt: opt family: family [
 	self ffiCall: #(void resvg_options_set_font_family(resvg_options* opt, const char* family))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_font_sizeOpt: opt size: size [
 	"/**
 	 * @brief Sets the default font size.
@@ -427,7 +429,7 @@ LibResvg >> options_set_font_sizeOpt: opt size: size [
 	self ffiCall: #(void resvg_options_set_font_size(resvg_options* opt, float size))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_image_rendering_modeOpt: opt mode: mode [
 	"/**
 	 * @brief Sets the default image rendering method.
@@ -440,7 +442,7 @@ LibResvg >> options_set_image_rendering_modeOpt: opt mode: mode [
 	self ffiCall: #(void resvg_options_set_image_rendering_mode(resvg_options* opt, resvg_image_rendering mode))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_languagesOpt: opt languages: languages [
 	"/**
 	 * @brief Sets a comma-separated list of languages.
@@ -457,7 +459,7 @@ LibResvg >> options_set_languagesOpt: opt languages: languages [
 	self ffiCall: #(void resvg_options_set_languages(resvg_options* opt, const char* languages))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_monospace_familyOpt: opt family: family [
 	"/**
 	 * @brief Sets the `monospace` font family.
@@ -472,7 +474,7 @@ LibResvg >> options_set_monospace_familyOpt: opt family: family [
 	self ffiCall: #(void resvg_options_set_monospace_family(resvg_options* opt, const char* family))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_resources_dirOpt: opt path: path [
 	"/**
 	 * @brief Sets a directory that will be used during relative paths resolving.
@@ -488,7 +490,7 @@ LibResvg >> options_set_resources_dirOpt: opt path: path [
 	self ffiCall: #(void resvg_options_set_resources_dir(resvg_options* opt, const char* path))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_sans_serif_familyOpt: opt family: family [
 	"/**
 	 * @brief Sets the `sans-serif` font family.
@@ -503,7 +505,7 @@ LibResvg >> options_set_sans_serif_familyOpt: opt family: family [
 	self ffiCall: #(void resvg_options_set_sans_serif_family(resvg_options* opt, const char* family))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_serif_familyOpt: opt family: family [
 	"/**
 	 * @brief Sets the `serif` font family.
@@ -518,7 +520,7 @@ LibResvg >> options_set_serif_familyOpt: opt family: family [
 	self ffiCall: #(void resvg_options_set_serif_family(resvg_options* opt, const char* family))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_shape_rendering_modeOpt: opt mode: mode [
 	"/**
 	 * @brief Sets the default shape rendering method.
@@ -531,7 +533,7 @@ LibResvg >> options_set_shape_rendering_modeOpt: opt mode: mode [
 	self ffiCall: #(void resvg_options_set_shape_rendering_mode(resvg_options* opt, resvg_shape_rendering mode))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_stylesheetOpt: opt content: content [
 	"/**
 	 * @brief Provides the content of a stylesheet that will be used when resolving CSS attributes.
@@ -544,7 +546,7 @@ LibResvg >> options_set_stylesheetOpt: opt content: content [
 	self ffiCall: #(void resvg_options_set_stylesheet(resvg_options* opt, const char* content))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> options_set_text_rendering_modeOpt: opt mode: mode [
 	"/**
 	 * @brief Sets the default text rendering method.
@@ -557,7 +559,7 @@ LibResvg >> options_set_text_rendering_modeOpt: opt mode: mode [
 	self ffiCall: #(void resvg_options_set_text_rendering_mode(resvg_options* opt, resvg_text_rendering mode))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> parse_tree_from_data: data len: len opt: opt tree: tree [
 	"/**
 	 * @brief Creates #resvg_render_tree from data.
@@ -574,7 +576,7 @@ LibResvg >> parse_tree_from_data: data len: len opt: opt tree: tree [
 	^ self ffiCall: #(int32_t resvg_parse_tree_from_data(const char* data, uintptr_t len, resvg_options* opt, resvg_render_tree* tree))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> parse_tree_from_fileFile_path: file_path opt: opt tree: tree [
 	"/**
 	 * @brief Creates #resvg_render_tree from file.
@@ -592,7 +594,7 @@ LibResvg >> parse_tree_from_fileFile_path: file_path opt: opt tree: tree [
 	^ self ffiCall: #(int32_t resvg_parse_tree_from_file(const char* file_path, resvg_options* opt, resvg_render_tree* tree))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> renderTree: tree transform: transform width: width height: height pixmap: pixmap [
 	"/**
 	 * @brief Renders the #resvg_render_tree onto the pixmap.
@@ -608,7 +610,7 @@ LibResvg >> renderTree: tree transform: transform width: width height: height pi
 	self ffiCall: #(void resvg_render(resvg_render_tree* tree, resvg_transform transform, uint32_t width, uint32_t height, char* pixmap))
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> render_nodeTree: tree id: id transform: transform width: width height: height pixmap: pixmap [
 	"/**
 	 * @brief Renders a Node by ID onto the image.
@@ -636,7 +638,7 @@ LibResvg >> runner [
 		yourself
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> transform_identity [
 	"/**
 	 * @brief Creates an identity transform.
@@ -645,7 +647,7 @@ LibResvg >> transform_identity [
 	^ self ffiCall: #(resvg_transform resvg_transform_identity())
 ]
 
-{ #category : 'public' }
+{ #category : 'public - resvg' }
 LibResvg >> tree_destroy: tree [
 	"/**
 	 * @brief Destroys the #resvg_render_tree.
